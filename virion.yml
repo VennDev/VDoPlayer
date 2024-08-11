@@ -1,0 +1,7 @@
+---
+authors: VennDev
+name: VDoPlayer
+antigen: venndev\vdoplayer
+version: 1.0.0
+api: 5.0.0
+...
