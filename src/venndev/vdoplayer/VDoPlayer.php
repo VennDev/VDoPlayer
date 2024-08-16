@@ -41,9 +41,9 @@ final readonly class VDoPlayer
         // Run the coroutine to prevent blocking the main thread
         CoroutineGen::runBlocking(function () use ($player, $path, $data): Generator {
             try {
-                $fncDoPlayer = function ($player, $value) {
-                    if (isset($main)) {
-                        $main($player);
+                $fncDoPlayer = function ($fn, $player, $value) {
+                    if ($fn !== null) {
+                        $fn($player);
                     } else {
                         throw new RuntimeException("Function `main` not found in $value");
                     }
@@ -54,13 +54,13 @@ final readonly class VDoPlayer
                         foreach ($dir as $file) {
                             if (pathinfo($file, PATHINFO_EXTENSION) === 'php') {
                                 require_once $path . $value . DIRECTORY_SEPARATOR . $file;
-                                $fncDoPlayer($player, $file);
+                                $fncDoPlayer($main ?? null, $player, $file);
                             }
                             yield;
                         }
-                    } elseif (is_file($value)) {
-                        require_once $value;
-                        $fncDoPlayer($player, $value);
+                    } elseif (is_file($path . $value)) {
+                        require_once $path . $value;
+                        $fncDoPlayer($main ?? null, $player, $value);
                     } else {
                         $server = $this->plugin->getServer();
                         $server->dispatchCommand(
