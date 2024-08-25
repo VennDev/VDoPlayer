@@ -39,7 +39,7 @@ final readonly class VDoPlayer
     ): void
     {
         // Run the coroutine to prevent blocking the main thread
-        CoroutineGen::runBlocking(function () use ($player, $path, $data): Generator {
+        CoroutineGen::runNonBlocking(function () use ($player, $path, $data): Generator {
             try {
                 $fncDoPlayer = function ($fn, $player, $value) {
                     if ($fn !== null) {
